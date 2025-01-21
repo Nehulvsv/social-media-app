@@ -1,82 +1,3 @@
-// 'use client'
-
-// import { useEffect, useState } from 'react'
-// import { fetchProfile } from '@/utils/api'
-// import { UserCircle } from 'lucide-react'
-
-// interface ProfileData {
-//   name: string;
-//   username: string;
-//   bio: string;
-//   follower_count: number;
-//   following_count: number;
-//   profile_image: string;
-// }
-
-// export function UserProfile({username}) {
-//   const [profile, setProfile] = useState<ProfileData | null>(null)
-//   const [isLoading, setIsLoading] = useState(true)
-//   const [error, setError] = useState<string | null>(null)
-
-//   useEffect(() => {
-//     async function loadProfile() {
-//       try {
-//         const data = await fetchProfile(username)
-//         setProfile(data.data)
-//       } catch (err) {
-//         setError('Failed to load profile')
-//       } finally {
-//         setIsLoading(false)
-//       }
-//     }
-
-//     loadProfile()
-//   }, [])
-
-//   if (isLoading) {
-//     return <div className="text-center">Loading profile...</div>
-//   }
-
-//   if (error) {
-//     return <div className="text-center text-red-500">{error}</div>
-//   }
-
-//   if (!profile) {
-//     return <div className="text-center">No profile data available</div>
-//   }
-
-//   return (
-//     <div className="flex flex-col items-center text-center space-y-4">
-//       <div className="relative">
-//         {profile.profile_image ? (
-//           <img
-//             src={`http://127.0.0.1:8000/api${profile.profile_image}` }
-//             alt={profile.username}
-//             className="h-24 w-24 rounded-full overflow-auto"
-//           />
-//         ) : (
-//           <UserCircle className="h-24 w-24 text-gray-300" />
-//         )}
-//       </div>
-//       <div className="space-y-2">
-//         <h1 className="text-2xl font-bold text-gray-900">{profile.first_name}</h1>
-//         <p className="text-gray-500">{profile.username}</p>
-//         <p className="text-gray-700 max-w-md mx-auto">{profile.bio}</p>
-//       </div>
-//       <div className="flex space-x-6">
-//         <div className="text-center">
-//           <span className="block font-semibold text-gray-900">{profile.follower_count}</span>
-//           <span className="text-gray-500 text-sm">Followers</span>
-//         </div>
-//         <div className="text-center">
-//           <span className="block font-semibold text-gray-900">{profile.following_count}</span>
-//           <span className="text-gray-500 text-sm">Following</span>
-//         </div>
-//       </div>
-//     </div>
-//   )
-// }
-
 "use client";
 
 import { useEffect, useState } from "react";
@@ -177,32 +98,34 @@ export function UserProfile({ username }: UserProfileProps) {
   };
 
   return (
-    <div className="bg-white shadow rounded-lg overflow-hidden">
-      <div className="relative h-48 bg-gradient-to-r from-blue-500 to-purple-500">
+    <div className="bg-white dark:bg-gray-800 shadow rounded-lg overflow-hidden">
+      {/* Cover Section with Infinity Loop Gradient Animation */}
+      <div className="relative h-48 animate-gradient bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-[length:200%_200%]">
         {profile?.profile_image ? (
           <img
             src={`http://127.0.0.1:8000/api${profile.profile_image}`}
             alt={profile.username}
-            // className="h-24 w-24 rounded-full overflow-auto"
             className="absolute bottom-0 left-6 -mb-12 h-32 w-32 rounded-full border-4 border-white object-cover"
           />
         ) : (
-          <UserCircle className=" text-gray-300 absolute bottom-0 left-6 -mb-12 h-32 w-32 rounded-full border-4 border-white object-cover" />
+          <UserCircle className="text-gray-300 absolute bottom-0 left-6 -mb-12 h-32 w-32 rounded-full border-4 border-white object-cover" />
         )}
       </div>
       <div className="pt-16 px-6 pb-6">
         <div className="flex justify-between items-center mb-4">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">{profile.first_name} {profile.last_name}</h1>
-            <p className="text-gray-500">@{profile.username}</p>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+              {profile.first_name} {profile.last_name}
+            </h1>
+            <p className="text-gray-500 dark:text-gray-100">@{profile.username}</p>
           </div>
 
           {profile.is_our_profile ? (
-            <Link href={'/edit-profile'} >
-            <Button variant="outline" className="flex items-center gap-2">
-              <Edit className="h-4 w-4" />
-              Edit Profile
-            </Button>
+            <Link href={"/edit-profile"}>
+              <Button variant="outline" className="flex items-center gap-2">
+                <Edit className="h-4 w-4" />
+                Edit Profile
+              </Button>
             </Link>
           ) : (
             <Button
@@ -224,7 +147,7 @@ export function UserProfile({ username }: UserProfileProps) {
             </Button>
           )}
         </div>
-        <p className="text-gray-700 mb-4">{profile.bio}</p>
+        <p className="text-gray-700 mb-4 dark:text-gray-100">{profile.bio}</p>
         <div className="flex flex-wrap gap-4 text-sm text-gray-500 mb-4">
           {profile.location && (
             <span className="flex items-center gap-1">
@@ -251,17 +174,23 @@ export function UserProfile({ username }: UserProfileProps) {
           )}
         </div>
         <div className="flex gap-4 text-sm">
-          <span className="font-semibold text-gray-900">
+          <span className="font-semibold text-gray-900 dark:text-gray-100">
             {profile.post_count}{" "}
-            <span className="font-normal text-gray-500">Posts</span>
+            <span className="font-normal text-gray-500 dark:text-gray-400">
+              Posts
+            </span>
           </span>
-          <span className="font-semibold text-gray-900">
+          <span className="font-semibold text-gray-900 dark:text-gray-100">
             {profile.follower_count}{" "}
-            <span className="font-normal text-gray-500">Followers</span>
+            <span className="font-normal text-gray-500 dark:text-gray-400">
+              Followers
+            </span>
           </span>
-          <span className="font-semibold text-gray-900">
+          <span className="font-semibold text-gray-900 dark:text-gray-100">
             {profile.following_count}{" "}
-            <span className="font-normal text-gray-500">Following</span>
+            <span className="font-normal text-gray-500 dark:text-gray-400">
+              Following
+            </span>
           </span>
         </div>
       </div>

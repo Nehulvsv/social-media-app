@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { fetchPosts, toggleLike, deletePost, updatePost} from "@/utils/api";
+import { fetchPosts, toggleLike, deletePost, updatePost } from "@/utils/api";
 import { Heart, UserCircle, MoreVertical, Edit, Trash } from "lucide-react";
+import { Button } from "./ui/button";
+import { Textarea } from "./ui/textarea";
 
 interface Post {
   content: string;
@@ -68,7 +70,9 @@ export function Posts({ username }: PostsProps) {
     if (selectedPost) {
       try {
         await deletePost(selectedPost.id);
-        setPosts((prevPosts) => prevPosts.filter((post) => post.id !== selectedPost.id));
+        setPosts((prevPosts) =>
+          prevPosts.filter((post) => post.id !== selectedPost.id)
+        );
         setIsDeleteModalOpen(false);
       } catch (err) {
         console.error("Failed to delete post", err);
@@ -82,7 +86,9 @@ export function Posts({ username }: PostsProps) {
         await updatePost(selectedPost.id, { content: editContent });
         setPosts((prevPosts) =>
           prevPosts.map((post) =>
-            post.id === selectedPost.id ? { ...post, content: editContent } : post
+            post.id === selectedPost.id
+              ? { ...post, content: editContent }
+              : post
           )
         );
         setIsEditModalOpen(false);
@@ -107,7 +113,10 @@ export function Posts({ username }: PostsProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       {posts.map((post) => (
-        <article key={post.id} className="rounded-lg border bg-white dark:bg-gray-800 overflow-hidden flex flex-col">
+        <article
+          key={post.id}
+          className="rounded-lg border bg-white dark:bg-gray-800 overflow-hidden flex flex-col"
+        >
           <div className="p-3 flex-grow">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center space-x-2">
@@ -115,12 +124,14 @@ export function Posts({ username }: PostsProps) {
                   <img
                     src={`http://127.0.0.1:8000/api${post.user_image}`}
                     alt={post.username}
-                    className="h-11 w-11 rounded-full border-4 border-white object-cover"
+                    className="h-9 w-9 rounded-full border-2 border-white object-cover"
                   />
                 ) : (
                   <UserCircle className="text-gray-300 h-11 w-11" />
                 )}
-                <span className="text-gray-600 dark:text-gray-400">@{post?.username}</span>
+                <span className="text-gray-600 dark:text-gray-400">
+                  @{post?.username}
+                </span>
               </div>
               <div className="relative">
                 <button
@@ -153,7 +164,9 @@ export function Posts({ username }: PostsProps) {
               </div>
             </div>
             <div className="min-h-[100px] flex items-center justify-center p-4 bg-gray-50 dark:bg-gray-700/50 rounded-md mb-4">
-              <p className="text-gray-900 dark:text-gray-100 text-center">{post.content}</p>
+              <p className="text-gray-900 dark:text-gray-100 text-center">
+                {post.content}
+              </p>
             </div>
           </div>
           <div className="px-4 py-3 bg-gray-50 dark:bg-gray-700/50 flex justify-between items-center">
@@ -163,7 +176,9 @@ export function Posts({ username }: PostsProps) {
             >
               <Heart
                 className={`h-5 w-5 ${
-                  post.like_by_me ? "fill-current text-red-500" : "text-gray-500"
+                  post.like_by_me
+                    ? "fill-current text-red-500"
+                    : "text-gray-500"
                 }`}
               />
               <span>{post.like_count}</span>
@@ -179,21 +194,31 @@ export function Posts({ username }: PostsProps) {
       {isDeleteModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
           <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
-            <h2 className="text-lg font-bold mb-4 text-gray-900 dark:text-gray-100">Delete Post</h2>
-            <p className="mb-4 text-gray-700 dark:text-gray-300">Are you sure you want to delete this post?</p>
+            <h2 className="text-lg font-bold mb-4 text-gray-900 dark:text-gray-100">
+              Delete Post
+            </h2>
+            <p className="mb-4 text-gray-700 dark:text-gray-300">
+              Are you sure you want to delete this post?
+            </p>
             <div className="flex justify-end space-x-4">
-              <button
+              <Button
                 className="px-4 py-2 bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500"
-                onClick={() => {setIsDeleteModalOpen(false); setSelectedPost(null)}}
+                onClick={() => {
+                  setIsDeleteModalOpen(false);
+                  setSelectedPost(null);
+                }}
               >
                 Cancel
-              </button>
-              <button
+              </Button>
+              <Button
                 className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
-                onClick={()=> {handleDeletePost(); setSelectedPost(null);}}
+                onClick={() => {
+                  handleDeletePost();
+                  setSelectedPost(null);
+                }}
               >
                 Delete
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -202,26 +227,36 @@ export function Posts({ username }: PostsProps) {
       {/* Edit Modal */}
       {isEditModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
-            <h2 className="text-lg font-bold mb-4 text-gray-900 dark:text-gray-100">Edit Post</h2>
-            <textarea
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-96">
+            {" "}
+            {/* Increased width to 24rem (384px) */}
+            <h2 className="text-lg font-bold mb-4 text-gray-900 dark:text-gray-100">
+              Edit Post
+            </h2>
+            <Textarea
               value={editContent}
               onChange={(e) => setEditContent(e.target.value)}
-              className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md mb-4 dark:bg-gray-700 dark:text-gray-100"
+              className="w-full p-2 rounded-md mb-4 "
             />
             <div className="flex justify-end space-x-4">
-              <button
+              <Button
                 className="px-4 py-2 bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500"
-                onClick={() =>{ setIsEditModalOpen(false); setSelectedPost(null)}}
+                onClick={() => {
+                  setIsEditModalOpen(false);
+                  setSelectedPost(null);
+                }}
               >
                 Cancel
-              </button>
-              <button
-                className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
-                onClick={()=> {handleUpdatePost(); setSelectedPost(null)}}
+              </Button>
+              <Button
+                className="px-4 py-2"
+                onClick={() => {
+                  handleUpdatePost();
+                  setSelectedPost(null);
+                }}
               >
                 Save
-              </button>
+              </Button>
             </div>
           </div>
         </div>

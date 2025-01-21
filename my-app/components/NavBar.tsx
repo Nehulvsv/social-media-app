@@ -1,37 +1,32 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { useState } from 'react';
-import Cookies from 'js-cookie'; // Use js-cookie for cookie management
-import { useAuthContext } from '@/app/context/useAuth';
-import { useRouter } from 'next/navigation';
-import { Menu, X } from 'lucide-react';
+import Link from "next/link";
+import { useState, useEffect } from "react";
+import { ThemeToggle } from "./ThemeToggle"
+import { useAuthContext } from "@/app/context/useAuth";
+import { useRouter } from "next/navigation";
+import { Menu, X } from "lucide-react";
 
 export function NavBar() {
-  const { authLoading, auth_logout } = useAuthContext();
+  const { authLoading, auth_logout, isLoggedIn } = useAuthContext();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [userData, setUserData] = useState(null);
   const router = useRouter();
 
-  // Check localStorage for username
-  const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+  // Read userData from localStorage on component mount and when it changes
+  useEffect(() => {
+    const data = JSON.parse(localStorage.getItem("userData") || "{}");
+    setUserData(data);
+  }, [isLoggedIn]); // Re-run when isLoggedIn changes
 
   const navItems = [
-    { href: `/${userData.username}`, label: 'My Profile' },
-    { href: '/new-post', label: 'New Post' },
-    { href: '/search-friends', label: 'Search Friends' },
+    { href: `/${userData?.username}`, label: "My Profile" },
+    { href: "/new-post", label: "New Post" },
+    { href: "/search-friends", label: "Search Friends" },
   ];
 
   const handleLogout = async () => {
-    try {
-      // Remove tokens from cookies
-      Cookies.remove('access_token', { path: '/' });
-      Cookies.remove('refresh_token', { path: '/' });
-      localStorage.removeItem('userData');
-      await auth_logout();
-      router.push('/login');
-    } catch (error) {
-      console.error('Logout error:', error);
-    }
+    await auth_logout();
   };
 
   return (
@@ -59,6 +54,7 @@ export function NavBar() {
             </button>
           </div>
           <div className="flex items-center space-x-4">
+          <ThemeToggle />
             <button
               onClick={handleLogout}
               className="md:hidden p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"

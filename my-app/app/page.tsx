@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { allPost, toggleLike } from "@/utils/api";
 import { Heart, UserCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface Post {
   content: string;
@@ -103,16 +104,16 @@ const Home = () => {
                   <img
                     src={`http://127.0.0.1:8000/api${post.user_image}`}
                     alt={post.username}
-                    className="h-11 w-11 rounded-full border-4 border-white object-cover"
+                    className="h-9 w-9 rounded-full border-2 border-white object-cover"
                   />
                 ) : (
-                  <UserCircle className="text-gray-300 h-11 w-11" />
+                  <UserCircle className="text-gray-300 h-9 w-9" />
                 )}
                 <span className="text-gray-600 dark:text-gray-400">
                   @{post?.username}
                 </span>
               </div>
-              <div className="min-h-[100px] flex items-center justify-center p-4 bg-gray-50 dark:bg-gray-700/50 rounded-md mb-4">
+              <div className="min-h-[100px] flex items-center justify-center p-4 bg-gray-50 dark:bg-gray-700/50 rounded-md mb-4 mt-3">
                 <p className="text-gray-900 dark:text-gray-100 text-center">
                   {post.content}
                 </p>
@@ -139,13 +140,15 @@ const Home = () => {
       </div>
       {hasMore && (
         <div className="flex justify-center mt-8">
-          <button
+          <Button
+            type="button"
+            variant="primary"
             onClick={handleLoadMore}
             disabled={isLoading}
-            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:bg-blue-300"
+            className="px-4 py-2"
           >
             {isLoading ? "Loading..." : "Load More"}
-          </button>
+          </Button>
         </div>
       )}
     </div>

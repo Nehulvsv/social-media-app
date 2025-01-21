@@ -25,7 +25,7 @@ export default function Login() {
   
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <div className="min-h-screen flex items-center justify-center  bg-gray-100 dark:bg-gray-900 ">
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle>Log in to your account</CardTitle>

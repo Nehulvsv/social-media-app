@@ -27,27 +27,31 @@ export default function NewPost() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 py-8">
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 py-8">
       <div className="max-w-2xl mx-auto px-4">
-        <Card>
+        <Card className="bg-white dark:bg-gray-800">
           <CardHeader>
-            <CardTitle>Create a New Post</CardTitle>
+            <CardTitle className="text-gray-900 dark:text-gray-100">Create a New Post</CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="content">What's on your mind?</Label>
+                <Label htmlFor="content" className="text-gray-700 dark:text-gray-300">
+                  What's on your mind?
+                </Label>
                 <Textarea
                   id="content"
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
                   placeholder="Share your thoughts..."
                   required
-                  className="min-h-[100px]"
+                  className="min-h-[100px] bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600"
                 />
               </div>
               {/* <div className="space-y-2">
-                <Label htmlFor="image">Add an image (optional)</Label>
+                <Label htmlFor="image" className="text-gray-700 dark:text-gray-300">
+                  Add an image (optional)
+                </Label>
                 <div className="flex items-center space-x-2">
                   <Input
                     id="image"
@@ -60,14 +64,19 @@ export default function NewPost() {
                     type="button"
                     variant="outline"
                     onClick={() => document.getElementById('image')?.click()}
+                    className="bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600"
                   >
                     <ImagePlus className="mr-2 h-4 w-4" />
                     Choose Image
                   </Button>
-                  {image && <span className="text-sm text-gray-500">{image.name}</span>}
+                  {image && (
+                    <span className="text-sm text-gray-500 dark:text-gray-400">
+                      {image.name}
+                    </span>
+                  )}
                 </div>
               </div> */}
-              <Button type="submit" className="w-full">
+              <Button type="submit" className="w-full ">
                 Post
               </Button>
             </form>
@@ -77,4 +86,3 @@ export default function NewPost() {
     </div>
   )
 }
-

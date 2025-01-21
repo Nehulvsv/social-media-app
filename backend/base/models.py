@@ -14,7 +14,7 @@ class MyUser(AbstractUser):
     def __str__(self):
         return self.username
     
-    
+        
 class Posts(models.Model):
     user = models.ForeignKey(MyUser, on_delete=models.CASCADE, related_name='posts')
     content = models.TextField(max_length=450)

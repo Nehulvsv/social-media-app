@@ -14,7 +14,6 @@ interface AuthContextType {
   authLoading: boolean;
   auth_login: (username: string, password: string) => Promise<void>;
   auth_logout: () => Promise<void>;
-
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -35,18 +34,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (success) {
         setIsLoggedIn(true);
         const userData = {
-          "username":success.user.username,
-          "bio":success.user.bio,
-          "email":success.user.email,
-          "first_name":success.user.first_name,
-          "last_name":success.user.last_name,
-      }
-      localStorage.setItem('userData', JSON.stringify(userData))
-        try {
-          await router.push(`/${username}`);
-        } catch (err) {
-          console.error("Navigation failed:", err);
-        }
+          username: success.user.username,
+          bio: success.user.bio,
+          email: success.user.email,
+          first_name: success.user.first_name,
+          last_name: success.user.last_name,
+        };
+        localStorage.setItem("userData", JSON.stringify(userData));
+        router.push(`/${username}`);
       } else {
         setIsLoggedIn(false);
         alert("Invalid username or password");
@@ -61,18 +56,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       const success = await logout();
       if (success) {
-        setIsLoggedIn(true);
-        try {
-          await router.push(`/login`);
-        } catch (err) {
-          console.error("Navigation failed:", err);
-        }
+        setIsLoggedIn(false); // Corrected to false
+        localStorage.removeItem("userData"); // Clear localStorage on logout
+        router.push("/login");
       } else {
-        setIsLoggedIn(false);
-        alert("Invalid username or password");
+        alert("Logout failed. Please try again.");
       }
     } catch (err) {
-      setIsLoggedIn(false);
+      console.error("Logout error:", err);
       alert("An error occurred. Please try again.");
     }
   };
@@ -92,10 +83,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      check_auth();
-    }
-}, [window.location.pathname])
+    check_auth();
+  }, []); // Run only on mount
 
   return (
     <AuthContext.Provider
